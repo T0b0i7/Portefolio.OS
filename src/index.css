@@ -1,31 +1,140 @@
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-display: "Public Sans", ui-sans-serif, system-ui, sans-serif;
-  --color-primary: #ec5b13;
-  --color-background-dark: #0a0a0c;
-  --color-neon-purple: #a855f7;
-  --color-neon-cyan: #06b6d4;
-  --color-charcoal: #1a1a1e;
+  --font-serif: "Cormorant Garamond", serif;
+  --font-brutal: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-primary: var(--theme-primary);
+  --color-bg-main: var(--theme-bg);
+  --color-text-main: var(--theme-text);
+  --color-accent-1: var(--theme-accent-1);
+  --color-accent-2: var(--theme-accent-2);
+  --color-card-bg: var(--theme-card-bg);
+  --color-card-border: var(--theme-card-border);
+  
+  --layout-hero: var(--theme-hero-layout);
+  --layout-grid: var(--theme-grid-layout);
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  --animate-marquee: marquee 20s linear infinite;
 }
 
 @layer base {
+  :root {
+    /* Default: Futuristic */
+    --theme-primary: #ec5b13;
+    --theme-bg: #0a0a0c;
+    --theme-text: #f1f5f9;
+    --theme-accent-1: #a855f7;
+    --theme-accent-2: #06b6d4;
+    --theme-card-bg: rgba(26, 26, 30, 0.6);
+    --theme-card-border: rgba(255, 255, 255, 0.05);
+    --radius-theme: 1.5rem;
+    --theme-hero-layout: "centered";
+  }
+
+  [data-theme="editorial"] {
+    --theme-primary: #5A5A40;
+    --theme-bg: #f5f2ed;
+    --theme-text: #1a1a1a;
+    --theme-accent-1: #8B7E66;
+    --theme-accent-2: #A39171;
+    --theme-card-bg: #ffffff;
+    --theme-card-border: rgba(0, 0, 0, 0.1);
+    --radius-theme: 0rem;
+    --theme-hero-layout: "split";
+  }
+
+  [data-theme="brutalist"] {
+    --theme-primary: #00FF00;
+    --theme-bg: #ffffff;
+    --theme-text: #000000;
+    --theme-accent-1: #000000;
+    --theme-accent-2: #000000;
+    --theme-card-bg: #ffffff;
+    --theme-card-border: #000000;
+    --radius-theme: 0rem;
+    --theme-hero-layout: "marquee";
+  }
+
   body {
-    @apply bg-background-dark font-display text-slate-100 antialiased;
+    @apply bg-bg-main text-text-main antialiased transition-colors duration-500;
+    font-family: var(--theme-font, var(--font-display));
+  }
+
+  [data-theme="editorial"] body {
+    --theme-font: var(--font-serif);
+  }
+
+  [data-theme="brutalist"] body {
+    --theme-font: var(--font-brutal);
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-charcoal/60 backdrop-blur-xl border border-white/5;
+    @apply backdrop-blur-xl transition-all duration-300;
+    background: var(--theme-card-bg);
+    border: 1px solid var(--theme-card-border);
+    border-radius: var(--radius-theme);
   }
   
-  .text-gradient-purple {
-    @apply bg-linear-to-r from-neon-purple to-neon-cyan bg-clip-text text-transparent;
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to right, var(--theme-accent-1), var(--theme-accent-2));
   }
   
-  .neon-border-hover {
-    @apply transition-all duration-500 hover:border-neon-purple/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.2)];
+  .theme-button {
+    @apply px-6 py-2.5 font-bold transition-all transform hover:scale-105 cursor-pointer;
+    background-color: var(--theme-primary);
+    color: var(--theme-btn-text, white);
+    border-radius: var(--radius-btn, 9999px);
+  }
+
+  [data-theme="editorial"] .theme-button {
+    --radius-btn: 0px;
+    --theme-btn-text: white;
+  }
+
+  [data-theme="brutalist"] .theme-button {
+    --radius-btn: 0px;
+    --theme-btn-text: black;
+    @apply border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px];
+  }
+
+  .theme-card {
+    @apply relative overflow-hidden transition-all duration-500;
+    background: var(--theme-card-bg);
+    border: 1px solid var(--theme-card-border);
+    border-radius: var(--radius-theme);
+  }
+
+  [data-theme="editorial"] .theme-card {
+    @apply border-0 border-b border-black/10 rounded-none;
+  }
+
+  [data-theme="brutalist"] .theme-card {
+    @apply border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px];
+  }
+
+  /* Marquee Animation for Brutalist */
+  .marquee {
+    @apply flex overflow-hidden whitespace-nowrap;
+  }
+  
+  .marquee-content {
+    @apply flex animate-marquee;
+  }
+
+  /* Vertical Text for Editorial */
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
   }
 }
