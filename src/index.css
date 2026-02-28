@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;600;800&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -6,6 +6,8 @@
   --font-serif: "Cormorant Garamond", serif;
   --font-brutal: "Space Grotesk", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+  --font-luxury: "Playfair Display", serif;
+  --font-clean: "Inter", sans-serif;
   
   --color-primary: var(--theme-primary);
   --color-bg-main: var(--theme-bg);
@@ -37,6 +39,7 @@
     --theme-card-border: rgba(255, 255, 255, 0.05);
     --radius-theme: 1.5rem;
     --theme-hero-layout: "centered";
+    --theme-font: var(--font-display);
   }
 
   [data-theme="editorial"] {
@@ -49,6 +52,7 @@
     --theme-card-border: rgba(0, 0, 0, 0.1);
     --radius-theme: 0rem;
     --theme-hero-layout: "split";
+    --theme-font: var(--font-serif);
   }
 
   [data-theme="brutalist"] {
@@ -61,19 +65,103 @@
     --theme-card-border: #000000;
     --radius-theme: 0rem;
     --theme-hero-layout: "marquee";
+    --theme-font: var(--font-brutal);
   }
 
-  body {
-    @apply bg-bg-main text-text-main antialiased transition-colors duration-500;
-    font-family: var(--theme-font, var(--font-display));
+  [data-theme="minimalist"] {
+    --theme-primary: #000000;
+    --theme-bg: #ffffff;
+    --theme-text: #111111;
+    --theme-accent-1: #666666;
+    --theme-accent-2: #999999;
+    --theme-card-bg: #f9f9f9;
+    --theme-card-border: #eeeeee;
+    --radius-theme: 0.5rem;
+    --theme-hero-layout: "clean";
+    --theme-font: var(--font-clean);
   }
 
-  [data-theme="editorial"] body {
+  [data-theme="luxury"] {
+    --theme-primary: #D4AF37;
+    --theme-bg: #050505;
+    --theme-text: #ffffff;
+    --theme-accent-1: #C5A028;
+    --theme-accent-2: #B8860B;
+    --theme-card-bg: #111111;
+    --theme-card-border: rgba(212, 175, 55, 0.2);
+    --radius-theme: 0.25rem;
+    --theme-hero-layout: "elegant";
+    --theme-font: var(--font-luxury);
+  }
+
+  [data-theme="retro"] {
+    --theme-primary: #FF00FF;
+    --theme-bg: #000033;
+    --theme-text: #00FFFF;
+    --theme-accent-1: #FF00FF;
+    --theme-accent-2: #FFFF00;
+    --theme-card-bg: rgba(0, 0, 51, 0.8);
+    --theme-card-border: #00FFFF;
+    --radius-theme: 0rem;
+    --theme-hero-layout: "arcade";
+    --theme-font: var(--font-mono);
+  }
+
+  [data-theme="corporate"] {
+    --theme-primary: #2563eb;
+    --theme-bg: #f8fafc;
+    --theme-text: #0f172a;
+    --theme-accent-1: #3b82f6;
+    --theme-accent-2: #1e40af;
+    --theme-card-bg: #ffffff;
+    --theme-card-border: #e2e8f0;
+    --radius-theme: 0.75rem;
+    --theme-hero-layout: "centered";
+    --theme-font: var(--font-clean);
+  }
+
+  [data-theme="developer"] {
+    --theme-primary: #10b981;
+    --theme-bg: #020617;
+    --theme-text: #f8fafc;
+    --theme-accent-1: #059669;
+    --theme-accent-2: #064e3b;
+    --theme-card-bg: #0f172a;
+    --theme-card-border: #1e293b;
+    --radius-theme: 0.25rem;
+    --theme-hero-layout: "split";
+    --theme-font: var(--font-mono);
+  }
+
+  [data-theme="organic"] {
+    --theme-primary: #166534;
+    --theme-bg: #fdfcf7;
+    --theme-text: #14532d;
+    --theme-accent-1: #15803d;
+    --theme-accent-2: #166534;
+    --theme-card-bg: #ffffff;
+    --theme-card-border: #dcfce7;
+    --radius-theme: 2rem;
+    --theme-hero-layout: "split";
     --theme-font: var(--font-serif);
   }
 
-  [data-theme="brutalist"] body {
-    --theme-font: var(--font-brutal);
+  [data-theme="creative"] {
+    --theme-primary: #f43f5e;
+    --theme-bg: #fff1f2;
+    --theme-text: #881337;
+    --theme-accent-1: #fb7185;
+    --theme-accent-2: #e11d48;
+    --theme-card-bg: #ffffff;
+    --theme-card-border: #ffe4e6;
+    --radius-theme: 3rem;
+    --theme-hero-layout: "centered";
+    --theme-font: var(--font-display);
+  }
+
+  body {
+    @apply bg-bg-main text-text-main antialiased transition-all duration-500;
+    font-family: var(--theme-font);
   }
 }
 
@@ -108,6 +196,23 @@
     @apply border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px];
   }
 
+  [data-theme="minimalist"] .theme-button {
+    --radius-btn: 0.5rem;
+    --theme-btn-text: white;
+  }
+
+  [data-theme="luxury"] .theme-button {
+    --radius-btn: 0px;
+    --theme-btn-text: black;
+    @apply border border-primary uppercase tracking-widest;
+  }
+
+  [data-theme="retro"] .theme-button {
+    --radius-btn: 0px;
+    --theme-btn-text: #000033;
+    @apply border-2 border-primary shadow-[0_0_10px_#FF00FF] hover:shadow-[0_0_20px_#FF00FF];
+  }
+
   .theme-card {
     @apply relative overflow-hidden transition-all duration-500;
     background: var(--theme-card-bg);
@@ -121,6 +226,18 @@
 
   [data-theme="brutalist"] .theme-card {
     @apply border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px];
+  }
+
+  [data-theme="minimalist"] .theme-card {
+    @apply shadow-sm hover:shadow-md border-slate-100;
+  }
+
+  [data-theme="luxury"] .theme-card {
+    @apply border-primary/20 hover:border-primary/50;
+  }
+
+  [data-theme="retro"] .theme-card {
+    @apply border-2 border-primary shadow-[0_0_15px_rgba(0,255,255,0.3)] hover:shadow-[0_0_25px_rgba(0,255,255,0.5)];
   }
 
   /* Marquee Animation for Brutalist */
