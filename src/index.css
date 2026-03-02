@@ -193,7 +193,7 @@
   [data-theme="brutalist"] .theme-button {
     --radius-btn: 0px;
     --theme-btn-text: black;
-    @apply border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px];
+    @apply border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5;
   }
 
   [data-theme="minimalist"] .theme-button {
@@ -225,7 +225,7 @@
   }
 
   [data-theme="brutalist"] .theme-card {
-    @apply border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px];
+    @apply border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1;
   }
 
   [data-theme="minimalist"] .theme-card {
