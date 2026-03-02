@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { LayoutGrid, PlayCircle, Terminal, Zap, Palette, Database, CheckCircle, Image as ImageIcon, Share2, AtSign, Monitor, BookOpen, Skull, Sparkles, Cpu, Ghost, Briefcase, Code, Leaf, Brush } from "lucide-react";
+import { LayoutGrid, PlayCircle, Terminal, Zap, Palette, Database, CheckCircle, Image as ImageIcon, Share2, AtSign, Monitor, BookOpen, Skull, Sparkles, Cpu, Ghost, Briefcase, Code, Leaf, Brush, Menu, X } from "lucide-react";
 
 type Theme = "futuristic" | "editorial" | "brutalist" | "minimalist" | "luxury" | "retro" | "corporate" | "developer" | "organic" | "creative";
 
@@ -19,9 +19,16 @@ const themes: { id: Theme, icon: any, label: string }[] = [
 
 const StyleSwitcher = ({ current, onChange }: { current: Theme, onChange: (t: Theme) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
-    <div className="fixed bottom-8 right-8 z-[100]">
+    <div className={`fixed z-[100] ${isMobile ? 'bottom-4 right-4' : 'bottom-8 right-8'}`}>
       <div className="relative flex flex-col items-end gap-3">
         <AnimatePresence>
           {isOpen && (
@@ -29,77 +36,125 @@ const StyleSwitcher = ({ current, onChange }: { current: Theme, onChange: (t: Th
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: 20 }}
-              className="flex flex-col gap-2 mb-2"
+              className={`flex flex-col gap-2 mb-2 ${isMobile ? 'grid grid-cols-5 gap-2 w-64' : ''}`}
             >
               {themes.map((t) => (
-                <button
+                <motion.button
                   key={t.id}
+                  whileHover={{ scale: 1.1 }}
                   onClick={() => {
                     onChange(t.id);
                     setIsOpen(false);
                   }}
-                  className={`group relative size-12 flex items-center justify-center rounded-full transition-all duration-300 shadow-xl border ${
+                  className={`group relative flex items-center justify-center rounded-full transition-all duration-300 shadow-lg border ${
                     current === t.id 
                       ? "bg-primary text-white border-primary" 
                       : "bg-card-bg text-text-main border-card-border hover:border-primary/50"
-                  }`}
+                  } ${isMobile ? 'size-10' : 'size-12'}`}
+                  title={t.label}
                 >
                   {t.icon}
-                  <span className="absolute right-full mr-4 px-3 py-1 bg-card-bg border border-card-border text-[10px] font-bold uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                    {t.label} Edition
-                  </span>
-                </button>
+                  {!isMobile && (
+                    <span className="absolute right-full mr-4 px-3 py-1 bg-card-bg border border-card-border text-[10px] font-bold uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                      {t.label}
+                    </span>
+                  )}
+                </motion.button>
               ))}
             </motion.div>
           )}
         </AnimatePresence>
 
-        <button 
+        <motion.button 
           onClick={() => setIsOpen(!isOpen)}
-          className={`size-16 flex items-center justify-center rounded-full shadow-2xl transition-all duration-500 transform ${
+          className={`flex items-center justify-center rounded-full shadow-2xl transition-all duration-500 transform ${
             isOpen ? "bg-text-main text-bg-main rotate-45" : "bg-primary text-white hover:scale-110"
-          }`}
+          } ${isMobile ? 'size-14' : 'size-16'}`}
         >
-          {isOpen ? <LayoutGrid size={28} /> : <Palette size={28} />}
-          {!isOpen && (
+          {isOpen ? <X size={isMobile ? 24 : 28} /> : <Palette size={isMobile ? 20 : 28} />}
+          {!isOpen && !isMobile && (
             <span className="absolute -top-2 -right-2 size-6 bg-text-main text-bg-main text-[10px] font-black flex items-center justify-center rounded-full border-2 border-bg-main">
               {themes.length}
             </span>
           )}
-        </button>
+        </motion.button>
       </div>
     </div>
   );
 };
 
-const Navbar = ({ theme }: { theme: Theme }) => (
-  <header className={`fixed top-0 w-full z-50 px-6 py-4 ${theme === 'minimalist' ? 'bg-white/80 backdrop-blur-md border-b border-slate-100' : ''}`}>
-    <nav className={`max-w-7xl mx-auto flex items-center justify-between ${theme === 'minimalist' ? '' : 'glass-card px-8 py-4 rounded-full'}`}>
-      <div className="flex items-center gap-3">
-        <div className="size-10 bg-primary rounded-xl flex items-center justify-center text-white">
-          <LayoutGrid size={24} strokeWidth={2.5} />
+const Navbar = ({ theme }: { theme: Theme }) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return (
+    <header className={`fixed top-0 w-full z-40 px-4 py-3 sm:px-6 sm:py-4 ${theme === 'minimalist' ? 'bg-white/80 backdrop-blur-md border-b border-slate-100' : ''}`}>
+      <nav className={`max-w-7xl mx-auto flex items-center justify-between ${theme === 'minimalist' ? '' : 'glass-card px-4 py-3 sm:px-8 sm:py-4 rounded-full sm:rounded-full'}`}>
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="size-8 sm:size-10 bg-primary rounded-xl flex items-center justify-center text-white flex-shrink-0">
+            <LayoutGrid size={isMobile ? 18 : 24} strokeWidth={2.5} />
+          </div>
+          <div className="flex flex-col min-w-0">
+            <span className="text-sm sm:text-xl font-black tracking-tighter uppercase leading-none truncate">Portfolio.OS</span>
+            <span className="text-[8px] sm:text-[10px] font-bold text-primary uppercase tracking-[0.15em] sm:tracking-[0.2em] mt-0.5">
+              {themes.find(t => t.id === theme)?.label} Edition
+            </span>
+          </div>
         </div>
-        <div className="flex flex-col">
-          <span className="text-xl font-black tracking-tighter uppercase leading-none">Portfolio.OS</span>
-          <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] mt-1">
-            {themes.find(t => t.id === theme)?.label} Edition
-          </span>
+        
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-8 lg:gap-10">
+          <a href="#showcase" className="text-xs lg:text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest whitespace-nowrap">Showcase</a>
+          <a href="#stack" className="text-xs lg:text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest whitespace-nowrap">Stack</a>
+          <a href="#cms" className="text-xs lg:text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest whitespace-nowrap">CMS</a>
+          <a href="#roadmap" className="text-xs lg:text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest whitespace-nowrap">Roadmap</a>
         </div>
-      </div>
-      <div className="hidden md:flex items-center gap-10">
-        <a href="#showcase" className="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest">Showcase</a>
-        <a href="#stack" className="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest">Stack</a>
-        <a href="#cms" className="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest">CMS</a>
-        <a href="#roadmap" className="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest">Roadmap</a>
-      </div>
-      <div className="flex items-center gap-4">
-        <button className="theme-button">
-          Start Building
+
+        {/* Mobile menu button */}
+        <button 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden p-2 hover:bg-text-main/10 rounded-lg transition-colors"
+          aria-label="Menu"
+        >
+          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
-      </div>
-    </nav>
-  </header>
-);
+
+        {/* Desktop CTA Button */}
+        <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
+          <button className="theme-button text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 whitespace-nowrap">
+            Start Building
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Navigation Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden mt-3 glass-card p-4"
+          >
+            <div className="flex flex-col gap-3">
+              <a href="#showcase" className="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest py-2">Showcase</a>
+              <a href="#stack" className="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest py-2">Stack</a>
+              <a href="#cms" className="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest py-2">CMS</a>
+              <a href="#roadmap" className="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest py-2">Roadmap</a>
+              <button className="theme-button w-full text-sm py-2.5">Start Building</button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+};
 
 const Hero = ({ theme }: { theme: Theme }) => {
   if (theme === "brutalist") {
@@ -345,48 +400,50 @@ const Hero = ({ theme }: { theme: Theme }) => {
   }
 
   return (
-    <section className="relative pt-40 pb-20 px-6">
+    <section className="relative pt-24 sm:pt-32 md:pt-40 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto text-center">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest mb-8"
+          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-6 sm:mb-8"
         >
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
           </span>
-          V2.0 est maintenant disponible
+          <span className="hidden sm:inline">V2.0 est maintenant disponible</span>
+          <span className="sm:hidden">V2.0 Disponible</span>
         </motion.div>
         <motion.h1 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tight mb-8 leading-[0.9] uppercase"
+          className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight mb-4 sm:mb-6 md:mb-8 leading-[0.9] uppercase"
         >
-          L'AVENIR DU <br />
+          L'AVENIR <br className="sm:hidden" /> DU <br />
           <span className="text-gradient">PORTFOLIO</span>
         </motion.h1>
         <motion.p 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="max-w-2xl mx-auto text-lg md:text-xl text-slate-400 font-light leading-relaxed mb-12"
+          className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg lg:text-xl text-slate-400 font-light leading-relaxed mb-6 sm:mb-8 md:mb-12 px-2 sm:px-0"
         >
-          Concevez des expériences numériques monumentales. Une plateforme next-gen pour les créatifs qui refusent les standards.
+          Concevez des expériences numériques monumentales. Une plateforme next-gen pour les créatifs.
         </motion.p>
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
         >
-          <button className="w-full sm:w-auto px-10 py-5 bg-text-main text-bg-main font-black rounded-xl text-lg hover:opacity-80 transition-all cursor-pointer">
-            Commencer l'aventure
+          <button className="w-full sm:w-auto px-6 sm:px-10 py-3 sm:py-5 bg-text-main text-bg-main font-black rounded-xl text-sm sm:text-base md:text-lg hover:opacity-80 transition-all cursor-pointer">
+            Commencer
           </button>
-          <button className="w-full sm:w-auto px-10 py-5 theme-card font-bold rounded-xl text-lg hover:bg-white/5 transition-colors flex items-center justify-center gap-2 cursor-pointer">
-            <PlayCircle size={24} />
-            Démo Vidéo
+          <button className="w-full sm:w-auto px-6 sm:px-10 py-3 sm:py-5 theme-card font-bold rounded-xl text-sm sm:text-base md:text-lg hover:bg-white/5 transition-colors flex items-center justify-center gap-2 cursor-pointer">
+            <PlayCircle size={20} />
+            <span className="hidden sm:inline">Démo Vidéo</span>
+            <span className="sm:hidden">Démo</span>
           </button>
         </motion.div>
       </div>
@@ -394,7 +451,7 @@ const Hero = ({ theme }: { theme: Theme }) => {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.8 }}
-        className="mt-20 max-w-6xl mx-auto theme-card shadow-2xl relative group"
+        className="mt-8 sm:mt-12 md:mt-20 max-w-6xl mx-auto theme-card shadow-2xl relative group"
       >
         <div className="absolute inset-0 bg-gradient-to-t from-bg-main to-transparent z-10 opacity-40"></div>
         <img 
@@ -431,33 +488,33 @@ const Showcase = ({ theme }: { theme: Theme }) => {
   ];
 
   return (
-    <section id="showcase" className={`py-32 px-6 ${theme === 'brutalist' ? 'border-b-2 border-black' : theme === 'retro' ? 'bg-[#000033]' : theme === 'developer' ? 'bg-slate-950 border-y border-slate-800' : theme === 'organic' ? 'bg-[#fdfcf7]' : theme === 'creative' ? 'bg-rose-50' : ''}`}>
+    <section id="showcase" className={`py-12 sm:py-20 md:py-32 px-4 sm:px-6 ${theme === 'brutalist' ? 'border-b-2 border-black' : theme === 'retro' ? 'bg-[#000033]' : theme === 'developer' ? 'bg-slate-950 border-y border-slate-800' : theme === 'organic' ? 'bg-[#fdfcf7]' : theme === 'creative' ? 'bg-rose-50' : ''}`}>
       <div className="max-w-7xl mx-auto">
-        <div className={`flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 ${theme === 'minimalist' || theme === 'corporate' ? 'text-center md:text-left' : ''}`}>
+        <div className={`flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6 ${theme === 'minimalist' || theme === 'corporate' ? 'text-center md:text-left' : ''}`}>
           <div>
-            <div className={`flex items-center gap-4 mb-4 ${theme === 'minimalist' || theme === 'corporate' ? 'justify-center md:justify-start' : ''}`}>
-              {theme === 'brutalist' && <span className="text-4xl font-black">01.</span>}
-              {theme === 'retro' && <span className="text-primary font-mono">[01]</span>}
-              {theme === 'developer' && <span className="text-primary font-mono">0x01</span>}
-              <h2 className={`text-4xl md:text-5xl font-black uppercase tracking-widest ${theme === 'luxury' || theme === 'organic' ? 'font-serif italic' : theme === 'corporate' ? 'tracking-tight normal-case' : ''}`}>
+            <div className={`flex items-center gap-2 sm:gap-4 mb-2 sm:mb-4 ${theme === 'minimalist' || theme === 'corporate' ? 'justify-center md:justify-start' : ''}`}>
+              {theme === 'brutalist' && <span className="text-2xl sm:text-4xl font-black">01.</span>}
+              {theme === 'retro' && <span className="text-primary font-mono text-sm sm:text-base">[01]</span>}
+              {theme === 'developer' && <span className="text-primary font-mono text-sm sm:text-base">0x01</span>}
+              <h2 className={`text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-widest ${theme === 'luxury' || theme === 'organic' ? 'font-serif italic' : theme === 'corporate' ? 'tracking-tight normal-case' : ''}`}>
                 Showcase
               </h2>
             </div>
-            <p className={`max-w-md ${theme === 'minimalist' || theme === 'corporate' ? 'mx-auto md:mx-0 text-slate-400' : theme === 'luxury' || theme === 'organic' ? 'italic opacity-60' : 'text-slate-400'}`}>
-              Une sélection de créations propulsées par notre moteur de rendu ultra-rapide.
+            <p className={`max-w-md text-xs sm:text-sm md:text-base ${theme === 'minimalist' || theme === 'corporate' ? 'mx-auto md:mx-0 text-slate-400' : theme === 'luxury' || theme === 'organic' ? 'italic opacity-60' : 'text-slate-400'}`}>
+              Une sélection de créations propulsées par notre moteur.
             </p>
           </div>
-          <div className="flex gap-2 justify-center">
-            <button className={`px-6 py-2 rounded-full border font-bold text-sm cursor-pointer ${theme === 'corporate' ? 'bg-blue-600 border-blue-600 text-white' : 'border-primary text-primary'}`}>Tous</button>
-            <button className="px-6 py-2 rounded-full border border-card-border hover:border-primary transition-colors text-sm font-medium cursor-pointer">Web3</button>
+          <div className="flex gap-2 justify-center md:justify-end text-xs sm:text-sm">
+            <button className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-full border font-bold cursor-pointer transition-colors ${theme === 'corporate' ? 'bg-blue-600 border-blue-600 text-white' : 'border-primary text-primary hover:bg-primary/5'}`}>Tous</button>
+            <button className="px-3 sm:px-6 py-1.5 sm:py-2 rounded-full border border-card-border hover:border-primary transition-colors font-medium cursor-pointer">Web3</button>
           </div>
         </div>
-        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ${theme === 'editorial' ? 'lg:gap-20' : theme === 'minimalist' || theme === 'corporate' ? 'gap-12' : theme === 'organic' ? 'gap-16' : ''}`}>
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 ${theme === 'editorial' ? 'lg:gap-20' : theme === 'minimalist' || theme === 'corporate' ? 'md:gap-12' : theme === 'organic' ? 'md:gap-16' : ''}`}>
           {projects.map((project, i) => (
             <motion.div 
               key={i}
               whileHover={{ y: -10 }}
-              className={`group theme-card ${theme === 'editorial' ? 'aspect-[3/4]' : theme === 'luxury' || theme === 'organic' ? 'aspect-[4/5] border-primary/10' : 'aspect-[4/5]'} transition-all duration-500 ${theme === 'corporate' ? 'shadow-lg hover:shadow-xl border-slate-100' : ''}`}
+              className={`group theme-card ${theme === 'editorial' ? 'aspect-[3/4]' : theme === 'luxury' || theme === 'organic' ? 'aspect-[4/5] border-primary/10' : 'aspect-[4/5]'} transition-all duration-500 ${theme === 'corporate' ? 'shadow-lg hover:shadow-xl border-slate-100' : ''} overflow-hidden`}
             >
               <img 
                 src={project.image} 
@@ -488,31 +545,31 @@ const Showcase = ({ theme }: { theme: Theme }) => {
 };
 
 const TechStack = ({ theme }: { theme: Theme }) => (
-  <section id="stack" className={`py-32 px-6 ${theme === 'brutalist' ? 'bg-primary border-b-2 border-black' : theme === 'minimalist' || theme === 'corporate' ? 'bg-white' : theme === 'retro' || theme === 'developer' ? 'bg-[#000033] border-y-2 border-primary' : theme === 'organic' ? 'bg-[#fdfcf7]' : theme === 'creative' ? 'bg-rose-50' : 'bg-text-main/5'}`}>
+  <section id="stack" className={`py-12 sm:py-20 md:py-32 px-4 sm:px-6 ${theme === 'brutalist' ? 'bg-primary border-b-2 border-black' : theme === 'minimalist' || theme === 'corporate' ? 'bg-white' : theme === 'retro' || theme === 'developer' ? 'bg-[#000033] border-y-2 border-primary' : theme === 'organic' ? 'bg-[#fdfcf7]' : theme === 'creative' ? 'bg-rose-50' : 'bg-text-main/5'}`}>
     <div className="max-w-7xl mx-auto">
-      <div className="text-center mb-20">
-        <div className="flex items-center justify-center gap-4 mb-4">
-          {theme === 'brutalist' && <span className="text-4xl font-black text-black">02.</span>}
-          {theme === 'retro' && <span className="text-primary font-mono">[02]</span>}
-          {theme === 'developer' && <span className="text-primary font-mono">0x02</span>}
-          <h2 className={`text-4xl font-black uppercase tracking-widest ${theme === 'brutalist' ? 'text-black' : theme === 'luxury' || theme === 'organic' ? 'font-serif italic' : theme === 'corporate' ? 'tracking-tight normal-case font-bold' : ''}`}>NOTRE TECH STACK</h2>
+      <div className="text-center mb-12 sm:mb-16 md:mb-20">
+        <div className="flex items-center justify-center gap-2 sm:gap-4 mb-2 sm:mb-4">
+          {theme === 'brutalist' && <span className="text-2xl sm:text-4xl font-black text-black">02.</span>}
+          {theme === 'retro' && <span className="text-primary font-mono text-sm sm:text-base">[02]</span>}
+          {theme === 'developer' && <span className="text-primary font-mono text-sm sm:text-base">0x02</span>}
+          <h2 className={`text-2xl sm:text-4xl font-black uppercase tracking-widest ${theme === 'brutalist' ? 'text-black' : theme === 'luxury' || theme === 'organic' ? 'font-serif italic' : theme === 'corporate' ? 'tracking-tight normal-case font-bold' : ''}`}>TECH STACK</h2>
         </div>
-        <p className={theme === 'brutalist' ? 'text-black font-bold' : theme === 'luxury' || theme === 'organic' ? 'italic opacity-60' : 'text-slate-400'}>Les outils les plus puissants du marché intégrés nativement.</p>
+        <p className={`text-xs sm:text-sm md:text-base ${theme === 'brutalist' ? 'text-black font-bold' : theme === 'luxury' || theme === 'organic' ? 'italic opacity-60' : 'text-slate-400'}`}>Les outils puissants intégrés nativement.</p>
       </div>
-      <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 ${theme === 'minimalist' || theme === 'corporate' ? 'gap-8' : ''}`}>
+      <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 ${theme === 'minimalist' || theme === 'corporate' ? 'md:gap-8' : ''}`}>
         {[
-          { icon: <Terminal className={theme === 'brutalist' ? 'text-black' : theme === 'retro' || theme === 'developer' ? 'text-primary' : 'text-accent-2'} size={32} />, name: "React.js" },
-          { icon: <Zap className={theme === 'brutalist' ? 'text-black' : theme === 'retro' || theme === 'developer' ? 'text-accent-1' : 'text-accent-1'} size={32} />, name: "Framer Motion" },
-          { icon: <Palette className={theme === 'brutalist' ? 'text-black' : theme === 'retro' || theme === 'developer' ? 'text-primary' : 'text-primary'} size={32} />, name: "Tailwind CSS" },
-          { icon: <Database className={theme === 'brutalist' ? 'text-black' : theme === 'retro' || theme === 'developer' ? 'text-accent-2' : 'text-accent-2'} size={32} />, name: "Supabase" }
+          { icon: <Terminal className={theme === 'brutalist' ? 'text-black' : theme === 'retro' || theme === 'developer' ? 'text-primary' : 'text-accent-2'} size={24} />, name: "React.js" },
+          { icon: <Zap className={theme === 'brutalist' ? 'text-black' : theme === 'retro' || theme === 'developer' ? 'text-accent-1' : 'text-accent-1'} size={24} />, name: "Motion" },
+          { icon: <Palette className={theme === 'brutalist' ? 'text-black' : theme === 'retro' || theme === 'developer' ? 'text-primary' : 'text-primary'} size={24} />, name: "Tailwind" },
+          { icon: <Database className={theme === 'brutalist' ? 'text-black' : theme === 'retro' || theme === 'developer' ? 'text-accent-2' : 'text-accent-2'} size={24} />, name: "Database" }
         ].map((tech, i) => (
           <motion.div 
             key={i}
             whileHover={{ scale: 1.05 }}
-            className={`theme-card p-8 flex flex-col items-center gap-4 hover:border-primary/50 transition-colors cursor-default ${theme === 'brutalist' ? 'bg-white border-2 border-black' : theme === 'minimalist' || theme === 'corporate' ? 'bg-slate-50 border-slate-100 shadow-none' : theme === 'luxury' || theme === 'organic' ? 'border-primary/10 bg-black/20' : theme === 'developer' ? 'bg-slate-900/50 border-slate-800' : ''}`}
+            className={`theme-card p-3 sm:p-6 md:p-8 flex flex-col items-center gap-2 sm:gap-3 md:gap-4 hover:border-primary/50 transition-colors cursor-default ${theme === 'brutalist' ? 'bg-white border-2 border-black' : theme === 'minimalist' || theme === 'corporate' ? 'bg-slate-50 border-slate-100 shadow-none' : theme === 'luxury' || theme === 'organic' ? 'border-primary/10 bg-black/20' : theme === 'developer' ? 'bg-slate-900/50 border-slate-800' : ''}`}
           >
             {tech.icon}
-            <span className={`font-bold ${theme === 'brutalist' ? 'text-black' : theme === 'luxury' || theme === 'organic' ? 'tracking-widest uppercase text-xs' : theme === 'corporate' ? 'text-slate-900' : ''}`}>{tech.name}</span>
+            <span className={`font-bold text-[10px] sm:text-xs md:text-sm ${theme === 'brutalist' ? 'text-black' : theme === 'luxury' || theme === 'organic' ? 'tracking-widest uppercase' : theme === 'corporate' ? 'text-slate-900' : ''}`}>{tech.name}</span>
           </motion.div>
         ))}
       </div>
@@ -521,55 +578,55 @@ const TechStack = ({ theme }: { theme: Theme }) => (
 );
 
 const CMSSection = ({ theme }: { theme: Theme }) => (
-  <section id="cms" className={`py-32 px-6 overflow-hidden ${theme === 'brutalist' ? 'border-b-2 border-black' : theme === 'minimalist' || theme === 'corporate' ? 'bg-white' : theme === 'organic' ? 'bg-[#fdfcf7]' : theme === 'creative' ? 'bg-rose-50' : ''}`}>
-    <div className={`max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20 ${theme === 'minimalist' || theme === 'corporate' ? 'lg:flex-row-reverse' : ''}`}>
+  <section id="cms" className={`py-12 sm:py-20 md:py-32 px-4 sm:px-6 overflow-hidden ${theme === 'brutalist' ? 'border-b-2 border-black' : theme === 'minimalist' || theme === 'corporate' ? 'bg-white' : theme === 'organic' ? 'bg-[#fdfcf7]' : theme === 'creative' ? 'bg-rose-50' : ''}`}>
+    <div className={`max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8 sm:gap-12 md:gap-20 ${theme === 'minimalist' || theme === 'corporate' ? 'lg:flex-row-reverse' : ''}`}>
       <div className="flex-1">
-        <div className="flex items-center gap-4 mb-8">
-          {theme === 'brutalist' && <span className="text-4xl font-black">03.</span>}
-          {theme === 'retro' && <span className="text-primary font-mono">[03]</span>}
-          {theme === 'developer' && <span className="text-primary font-mono">0x03</span>}
-          <h2 className={`text-5xl font-black leading-tight uppercase tracking-widest ${theme === 'luxury' || theme === 'organic' ? 'font-serif italic normal-case tracking-normal' : theme === 'corporate' ? 'tracking-tight normal-case font-bold' : ''}`}>
-            CMS INTUITIF. <br />
-            <span className={theme === 'luxury' || theme === 'organic' ? 'text-primary' : 'text-accent-1'}>PUISSANCE BRUTE.</span>
+        <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6 md:mb-8">
+          {theme === 'brutalist' && <span className="text-2xl sm:text-4xl font-black">03.</span>}
+          {theme === 'retro' && <span className="text-primary font-mono text-sm sm:text-base">[03]</span>}
+          {theme === 'developer' && <span className="text-primary font-mono text-sm sm:text-base">0x03</span>}
+          <h2 className={`text-2xl sm:text-4xl md:text-5xl font-black leading-tight uppercase tracking-widest ${theme === 'luxury' || theme === 'organic' ? 'font-serif italic normal-case tracking-normal' : theme === 'corporate' ? 'tracking-tight normal-case font-bold' : ''}`}>
+            CMS <br className="sm:hidden" /> INTUITIF. <br className="hidden sm:block" />
+            <span className={theme === 'luxury' || theme === 'organic' ? 'text-primary' : 'text-accent-1'}>PUISSANCE.</span>
           </h2>
         </div>
-        <p className={`text-lg mb-10 leading-relaxed ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-500' : theme === 'luxury' || theme === 'organic' ? 'italic opacity-70' : 'text-slate-400'}`}>
-          Éditez votre contenu en temps réel. Pas de code nécessaire pour les mises à jour quotidiennes, mais une liberté totale pour les développeurs.
+        <p className={`text-xs sm:text-sm md:text-base mb-6 sm:mb-8 md:mb-10 leading-relaxed ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-500' : theme === 'luxury' || theme === 'organic' ? 'italic opacity-70' : 'text-slate-400'}`}>
+          Éditez votre contenu en temps réel. Pas de code nécessaire.
         </p>
-        <ul className="space-y-6">
+        <ul className="space-y-3 sm:space-y-4 md:space-y-6">
           {[
-            "Édition WYSIWYG ultra-rapide",
-            "Gestion d'actifs média optimisée",
-            "SEO intégré de manière native"
+            "Édition WYSIWYG rapide",
+            "Gestion média optimisée",
+            "SEO natif"
           ].map((feature, i) => (
-            <li key={i} className="flex items-center gap-4">
-              <CheckCircle className={theme === 'luxury' || theme === 'organic' ? 'text-primary' : 'text-accent-2'} size={20} />
-              <span className={`font-medium ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-600' : ''}`}>{feature}</span>
+            <li key={i} className="flex items-center gap-2 sm:gap-4">
+              <CheckCircle className={theme === 'luxury' || theme === 'organic' ? 'text-primary' : 'text-accent-2'} size={18} />
+              <span className={`font-medium text-xs sm:text-sm md:text-base ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-600' : ''}`}>{feature}</span>
             </li>
           ))}
         </ul>
       </div>
-      <div className="flex-1 relative">
+      <div className="flex-1 relative w-full">
         <div className={`absolute -inset-10 ${theme === 'brutalist' || theme === 'minimalist' || theme === 'corporate' ? 'hidden' : 'bg-accent-1/10 blur-[100px]'} rounded-full`}></div>
-        <div className={`relative theme-card overflow-hidden shadow-2xl ${theme === 'minimalist' || theme === 'corporate' ? 'border-slate-200 shadow-lg' : theme === 'luxury' || theme === 'organic' ? 'border-primary/20 bg-black/40' : 'border-white/10'}`}>
-          <div className={`flex items-center gap-2 px-6 py-3 border-b ${theme === 'minimalist' || theme === 'corporate' ? 'border-slate-100 bg-slate-50' : 'border-card-border bg-text-main/5'}`}>
-            <div className="flex gap-1.5">
-              <div className="size-3 rounded-full bg-red-500/50"></div>
-              <div className="size-3 rounded-full bg-yellow-500/50"></div>
-              <div className="size-3 rounded-full bg-green-500/50"></div>
+        <div className={`relative theme-card overflow-hidden shadow-xl ${theme === 'minimalist' || theme === 'corporate' ? 'border-slate-200 shadow-lg' : theme === 'luxury' || theme === 'organic' ? 'border-primary/20 bg-black/40' : 'border-white/10'}`}>
+          <div className={`flex items-center gap-2 px-3 sm:px-6 py-2 sm:py-3 border-b ${theme === 'minimalist' || theme === 'corporate' ? 'border-slate-100 bg-slate-50' : 'border-card-border bg-text-main/5'}`}>
+            <div className="flex gap-1">
+              <div className="size-2 sm:size-3 rounded-full bg-red-500/50"></div>
+              <div className="size-2 sm:size-3 rounded-full bg-yellow-500/50"></div>
+              <div className="size-2 sm:size-3 rounded-full bg-green-500/50"></div>
             </div>
-            <div className="ml-4 text-[10px] text-slate-500 uppercase font-bold tracking-widest">Editor v2.4</div>
+            <div className="ml-2 sm:ml-4 text-[8px] sm:text-[10px] text-slate-500 uppercase font-bold tracking-widest">Editor v2.4</div>
           </div>
-          <div className="p-8">
-            <div className="space-y-6">
-              <div className={`h-4 w-1/3 rounded ${theme === 'minimalist' || theme === 'corporate' ? 'bg-slate-100' : 'bg-text-main/10'}`}></div>
-              <div className={`h-10 w-full border rounded-lg ${theme === 'minimalist' || theme === 'corporate' ? 'bg-white border-slate-100' : 'bg-text-main/5 border-card-border'}`}></div>
-              <div className={`h-4 w-1/4 rounded ${theme === 'minimalist' || theme === 'corporate' ? 'bg-slate-100' : 'bg-text-main/10'}`}></div>
-              <div className={`h-32 w-full border rounded-lg flex items-center justify-center ${theme === 'minimalist' || theme === 'corporate' ? 'bg-slate-50 border-slate-100' : 'bg-text-main/5 border-card-border'}`}>
-                <ImageIcon className={theme === 'minimalist' || theme === 'corporate' ? 'text-slate-200' : 'text-text-main/20'} size={40} />
+          <div className="p-3 sm:p-6 md:p-8">
+            <div className="space-y-3 sm:space-y-6">
+              <div className={`h-3 sm:h-4 w-1/3 rounded ${theme === 'minimalist' || theme === 'corporate' ? 'bg-slate-100' : 'bg-text-main/10'}`}></div>
+              <div className={`h-8 sm:h-10 w-full border rounded-lg ${theme === 'minimalist' || theme === 'corporate' ? 'bg-white border-slate-100' : 'bg-text-main/5 border-card-border'}`}></div>
+              <div className={`h-3 sm:h-4 w-1/4 rounded ${theme === 'minimalist' || theme === 'corporate' ? 'bg-slate-100' : 'bg-text-main/10'}`}></div>
+              <div className={`h-20 sm:h-32 w-full border rounded-lg flex items-center justify-center ${theme === 'minimalist' || theme === 'corporate' ? 'bg-slate-50 border-slate-100' : 'bg-text-main/5 border-card-border'}`}>
+                <ImageIcon className={theme === 'minimalist' || theme === 'corporate' ? 'text-slate-200' : 'text-text-main/20'} size={28} />
               </div>
               <div className="flex justify-end">
-                <div className="h-10 w-32 bg-primary rounded-lg"></div>
+                <div className="h-8 sm:h-10 w-24 sm:w-32 bg-primary rounded-lg"></div>
               </div>
             </div>
           </div>
@@ -606,25 +663,25 @@ const Roadmap = ({ theme }: { theme: Theme }) => {
   ];
 
   return (
-    <section id="roadmap" className={`py-32 px-6 ${theme === 'brutalist' ? 'bg-white' : theme === 'retro' || theme === 'developer' ? 'bg-[#000033]' : theme === 'corporate' ? 'bg-white' : theme === 'organic' ? 'bg-[#fdfcf7]' : theme === 'creative' ? 'bg-rose-50' : 'bg-text-main/5'}`}>
+    <section id="roadmap" className={`py-12 sm:py-20 md:py-32 px-4 sm:px-6 ${theme === 'brutalist' ? 'bg-white' : theme === 'retro' || theme === 'developer' ? 'bg-[#000033]' : theme === 'corporate' ? 'bg-white' : theme === 'organic' ? 'bg-[#fdfcf7]' : theme === 'creative' ? 'bg-rose-50' : 'bg-text-main/5'}`}>
       <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-center gap-4 mb-20">
-          {theme === 'brutalist' && <span className="text-4xl font-black">04.</span>}
-          {theme === 'retro' && <span className="text-primary font-mono">[04]</span>}
-          {theme === 'developer' && <span className="text-primary font-mono">0x04</span>}
-          <h2 className={`text-4xl font-black text-center uppercase tracking-widest ${theme === 'luxury' || theme === 'organic' ? 'font-serif italic tracking-normal' : theme === 'corporate' ? 'tracking-tight normal-case font-bold' : ''}`}>Roadmap 2026</h2>
+        <div className="flex items-center justify-center gap-2 sm:gap-4 mb-8 sm:mb-12 md:mb-20">
+          {theme === 'brutalist' && <span className="text-2xl sm:text-4xl font-black">04.</span>}
+          {theme === 'retro' && <span className="text-primary font-mono text-sm sm:text-base">[04]</span>}
+          {theme === 'developer' && <span className="text-primary font-mono text-sm sm:text-base">0x04</span>}
+          <h2 className={`text-2xl sm:text-4xl font-black text-center uppercase tracking-widest ${theme === 'luxury' || theme === 'organic' ? 'font-serif italic tracking-normal' : theme === 'corporate' ? 'tracking-tight normal-case font-bold' : ''}`}>Roadmap</h2>
         </div>
         <div className="relative">
           <div className={`absolute left-1/2 transform -translate-x-1/2 h-full w-px ${theme === 'brutalist' || theme === 'retro' || theme === 'developer' ? 'bg-primary' : 'bg-card-border'}`}></div>
           {steps.map((step, i) => (
-            <div key={i} className={`relative mb-24 flex items-center justify-between w-full ${step.reverse ? 'flex-row-reverse' : ''}`}>
-              <div className={`w-[45%] ${step.reverse ? 'text-left pl-12' : 'text-right pr-12'}`}>
-                <span className={`${step.textColor} font-bold mb-2 block ${theme === 'retro' || theme === 'developer' ? 'animate-pulse' : ''}`}>{step.q}</span>
-                <h4 className={`text-xl font-black mb-2 uppercase ${theme === 'luxury' || theme === 'organic' ? 'font-serif italic tracking-normal' : theme === 'corporate' ? 'tracking-tight normal-case font-bold' : ''}`}>{step.title}</h4>
-                <p className="text-slate-400 text-sm">{step.desc}</p>
+            <div key={i} className={`relative mb-12 sm:mb-16 md:mb-24 flex flex-col sm:flex-row items-start gap-4 sm:gap-0 w-full ${step.reverse ? 'sm:flex-row-reverse' : ''}`}>
+              <div className={`w-full sm:w-[45%] ${step.reverse ? 'sm:text-left sm:pl-12' : 'sm:text-right sm:pr-12'}`}>
+                <span className={`${step.textColor} font-bold mb-1 sm:mb-2 block text-xs sm:text-sm ${theme === 'retro' || theme === 'developer' ? 'animate-pulse' : ''}`}>{step.q}</span>
+                <h4 className={`text-lg sm:text-xl font-black mb-1 sm:mb-2 uppercase ${theme === 'luxury' || theme === 'organic' ? 'font-serif italic tracking-normal' : theme === 'corporate' ? 'tracking-tight normal-case font-bold' : ''}`}>{step.title}</h4>
+                <p className="text-slate-400 text-xs sm:text-sm">{step.desc}</p>
               </div>
-              <div className={`absolute left-1/2 transform -translate-x-1/2 size-4 rounded-full ${step.color} shadow-[0_0_15px] ${theme === 'retro' || theme === 'developer' ? 'border-2 border-white' : ''}`}></div>
-              <div className="w-[45%]"></div>
+              <div className={`absolute left-1/2 transform -translate-x-1/2 size-3 sm:size-4 rounded-full ${step.color} shadow-[0_0_15px] ${theme === 'retro' || theme === 'developer' ? 'border-2 border-white' : ''}`}></div>
+              <div className="hidden sm:block w-[45%]"></div>
             </div>
           ))}
         </div>
@@ -634,45 +691,39 @@ const Roadmap = ({ theme }: { theme: Theme }) => {
 };
 
 const Footer = ({ theme }: { theme: Theme }) => (
-  <footer className={`py-20 px-6 border-t ${theme === 'minimalist' || theme === 'corporate' ? 'bg-white border-slate-100' : 'border-card-border'}`}>
-    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-      <div className="col-span-1 md:col-span-2">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="size-10 bg-primary rounded-xl flex items-center justify-center text-white">
-            <LayoutGrid size={24} strokeWidth={2.5} />
+  <footer className={`py-8 sm:py-12 md:py-20 px-4 sm:px-6 border-t ${theme === 'minimalist' || theme === 'corporate' ? 'bg-white border-slate-100' : 'border-card-border'}`}>
+    <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-12">
+      <div className="col-span-1 sm:col-span-2 lg:col-span-1">
+        <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-8">
+          <div className="size-8 sm:size-10 bg-primary rounded-xl flex items-center justify-center text-white flex-shrink-0">
+            <LayoutGrid size={18} strokeWidth={2.5} />
           </div>
-          <span className="text-xl font-black tracking-tighter uppercase">Portfolio.OS</span>
+          <span className="text-base sm:text-xl font-black tracking-tighter uppercase">Portfolio.OS</span>
         </div>
-        <p className={`max-w-sm mb-8 leading-relaxed ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-500' : 'text-slate-400'}`}>
-          Le système d'exploitation définitif pour votre présence numérique. Construisez plus vite, designez mieux.
+        <p className={`max-w-sm mb-4 sm:mb-8 text-xs sm:text-sm leading-relaxed ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-500' : 'text-slate-400'}`}>
+          Le système pour votre présence numérique.
         </p>
-        <div className="flex gap-4">
-          <a href="#" className="group relative size-10 theme-card flex items-center justify-center hover:text-primary transition-colors">
-            <Share2 size={18} />
-            <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-card-bg border border-card-border text-[10px] font-bold uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-              Partager
-            </span>
+        <div className="flex gap-2 sm:gap-4">
+          <a href="#" className="group relative size-9 sm:size-10 theme-card flex items-center justify-center hover:text-primary transition-colors">
+            <Share2 size={16} />
           </a>
-          <a href="#" className="group relative size-10 theme-card flex items-center justify-center hover:text-primary transition-colors">
-            <AtSign size={18} />
-            <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-card-bg border border-card-border text-[10px] font-bold uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-              Contact
-            </span>
+          <a href="#" className="group relative size-9 sm:size-10 theme-card flex items-center justify-center hover:text-primary transition-colors">
+            <AtSign size={16} />
           </a>
         </div>
       </div>
       <div>
-        <h5 className={`font-black mb-8 uppercase text-xs tracking-[0.2em] ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-900' : ''}`}>Plateforme</h5>
-        <ul className={`space-y-4 text-sm ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-500' : 'text-slate-400'}`}>
+        <h5 className={`font-black mb-4 sm:mb-8 uppercase text-[10px] sm:text-xs tracking-[0.15em] sm:tracking-[0.2em] ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-900' : ''}`}>Plateforme</h5>
+        <ul className={`space-y-2 sm:space-y-4 text-xs sm:text-sm ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-500' : 'text-slate-400'}`}>
           <li><a href="#" className="hover:text-text-main transition-colors">Projets</a></li>
           <li><a href="#" className="hover:text-text-main transition-colors">Composants</a></li>
-          <li><a href="#" className="hover:text-text-main transition-colors">Documentation</a></li>
-          <li><a href="#" className="hover:text-text-main transition-colors">API Reference</a></li>
+          <li><a href="#" className="hover:text-text-main transition-colors">Docs</a></li>
+          <li><a href="#" className="hover:text-text-main transition-colors">API</a></li>
         </ul>
       </div>
       <div>
-        <h5 className={`font-black mb-8 uppercase text-xs tracking-[0.2em] ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-900' : ''}`}>Entreprise</h5>
-        <ul className={`space-y-4 text-sm ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-500' : 'text-slate-400'}`}>
+        <h5 className={`font-black mb-4 sm:mb-8 uppercase text-[10px] sm:text-xs tracking-[0.15em] sm:tracking-[0.2em] ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-900' : ''}`}>Entreprise</h5>
+        <ul className={`space-y-2 sm:space-y-4 text-xs sm:text-sm ${theme === 'minimalist' || theme === 'corporate' ? 'text-slate-500' : 'text-slate-400'}`}>
           <li><a href="#" className="hover:text-text-main transition-colors">À Propos</a></li>
           <li><a href="#" className="hover:text-text-main transition-colors">Blog</a></li>
           <li><a href="#" className="hover:text-text-main transition-colors">Contact</a></li>
@@ -680,11 +731,11 @@ const Footer = ({ theme }: { theme: Theme }) => (
         </ul>
       </div>
     </div>
-    <div className={`max-w-7xl mx-auto mt-20 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium ${theme === 'minimalist' || theme === 'corporate' ? 'border-slate-100 text-slate-400' : 'border-card-border text-slate-500'}`}>
-      <p>© 2024 Portfolio.OS. Tous droits réservés.</p>
-      <div className="flex gap-8">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
+    <div className={`max-w-7xl mx-auto mt-6 sm:mt-12 md:mt-20 pt-4 sm:pt-6 md:pt-8 border-t flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 text-[10px] sm:text-xs md:text-sm font-medium ${theme === 'minimalist' || theme === 'corporate' ? 'border-slate-100 text-slate-400' : 'border-card-border text-slate-500'}`}>
+      <p>© 2026 Portfolio.OS. Tous droits réservés.</p>
+      <div className="flex gap-4 sm:gap-8 text-xs">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
       </div>
     </div>
   </footer>
