@@ -6,7 +6,7 @@
 
 **Une plateforme next-gen pour les créatifs qui refusent les standards.**
 
-[Démo Live](#) • [Documentation](#) • [Contribuer](#)
+[Démo Live](https://portefolio-os-bice.vercel.app/) • [Documentation](#) • [Contribuer](#)
 
 </div>
 
@@ -259,11 +259,34 @@ useEffect(() => {
 
 ## 🌐 Déploiement
 
-### Vercel (Recommandé)
+### Vercel (Recommandé) ⭐
+
+Portfolio.OS est **optimisé pour Vercel**. Déploiement en 1 minute :
+
 ```bash
+# Option 1 : Automatique (recommandé)
+1. Connectez votre repo GitHub à https://vercel.com
+2. Cliquez sur "Import Project"
+3. Vercel détectera automatiquement Vite
+4. Cliquez Deploy ✨
+
+# Option 2 : Via CLI
 npm i -g vercel
 vercel
 ```
+
+**Avantages Vercel:**
+- ✅ Auto-détection Vite
+- ✅ Deploy instantané depuis Git
+- ✅ Domaine gratuit
+- ✅ SSL automatique
+- ✅ Edge middleware optionnel
+- ✅ Analytics intégrés
+
+**Your production build:**
+- `dist/index.html` - 1.19 kB
+- `dist/assets/` - ~120 kB gzippé total
+- **Fetch time global**: < 1s
 
 ### Netlify
 ```bash
@@ -282,6 +305,12 @@ RUN npm run build
 EXPOSE 3000
 CMD npm run dev
 ```
+
+### Render / Railway / Other Hosts
+1. `npm run build` génère le dossier `dist/`
+2. Configurez le serveur pour servir les fichiers statiques depuis `dist/`
+3. Activez la compression gzip
+4. Activez le cache-busting (fichiers hashed automatiquement)
 
 ---
 
