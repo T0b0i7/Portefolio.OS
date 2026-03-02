@@ -582,14 +582,14 @@ const CMSSection = ({ theme }: { theme: Theme }) => (
 const Roadmap = ({ theme }: { theme: Theme }) => {
   const steps = [
     {
-      q: "Q1 2024",
+      q: "Q1 2026",
       title: "Engine Refactoring",
       desc: "Passage à Rust pour le moteur de rendu côté serveur afin de diviser par 3 les temps de chargement.",
       color: "bg-accent-2 shadow-accent-2/50",
       textColor: "text-accent-2"
     },
     {
-      q: "Q2 2024",
+      q: "Q2 2026",
       title: "AI Design Assistant",
       desc: "Génération de layouts intelligents basée sur votre charte graphique existante.",
       color: "bg-accent-1 shadow-accent-1/50",
@@ -597,7 +597,7 @@ const Roadmap = ({ theme }: { theme: Theme }) => {
       reverse: true
     },
     {
-      q: "Q3 2024",
+      q: "Q3 2026",
       title: "Native Marketplace",
       desc: "Vendez vos propres composants et templates directement sur la plateforme.",
       color: "bg-primary shadow-primary/50",
@@ -612,7 +612,7 @@ const Roadmap = ({ theme }: { theme: Theme }) => {
           {theme === 'brutalist' && <span className="text-4xl font-black">04.</span>}
           {theme === 'retro' && <span className="text-primary font-mono">[04]</span>}
           {theme === 'developer' && <span className="text-primary font-mono">0x04</span>}
-          <h2 className={`text-4xl font-black text-center uppercase tracking-widest ${theme === 'luxury' || theme === 'organic' ? 'font-serif italic tracking-normal' : theme === 'corporate' ? 'tracking-tight normal-case font-bold' : ''}`}>Roadmap 2024</h2>
+          <h2 className={`text-4xl font-black text-center uppercase tracking-widest ${theme === 'luxury' || theme === 'organic' ? 'font-serif italic tracking-normal' : theme === 'corporate' ? 'tracking-tight normal-case font-bold' : ''}`}>Roadmap 2026</h2>
         </div>
         <div className="relative">
           <div className={`absolute left-1/2 transform -translate-x-1/2 h-full w-px ${theme === 'brutalist' || theme === 'retro' || theme === 'developer' ? 'bg-primary' : 'bg-card-border'}`}></div>
