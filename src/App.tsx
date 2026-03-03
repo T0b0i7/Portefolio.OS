@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { LayoutGrid, PlayCircle, Terminal, Zap, Palette, Database, CheckCircle, Image as ImageIcon, Share2, AtSign, Monitor, BookOpen, Skull, Sparkles, Cpu, Ghost, Briefcase, Code, Leaf, Brush, Menu, X } from "lucide-react";
 
-type Theme = "futuristic" | "editorial" | "brutalist" | "minimalist" | "luxury" | "retro" | "corporate" | "developer" | "organic" | "creative";
+type Theme = "futuristic" | "editorial" | "brutalist" | "minimalist" | "luxury" | "retro" | "corporate" | "developer" | "organic" | "creative" | "cyberpunk" | "forest" | "whiteminimal" | "steampunk" | "glassmorphism" | "aqua";
 
 const themes: { id: Theme, icon: any, label: string }[] = [
   { id: "futuristic", icon: <Monitor size={18} />, label: "Futuriste" },
@@ -15,6 +15,12 @@ const themes: { id: Theme, icon: any, label: string }[] = [
   { id: "developer", icon: <Code size={18} />, label: "Developer" },
   { id: "organic", icon: <Leaf size={18} />, label: "Organic" },
   { id: "creative", icon: <Brush size={18} />, label: "Creative" },
+  { id: "cyberpunk", icon: <Zap size={18} />, label: "Cyberpunk" },
+  { id: "forest", icon: <Leaf size={18} />, label: "Forêt" },
+  { id: "whiteminimal", icon: <Sparkles size={18} />, label: "Blanc Minimal" },
+  { id: "steampunk", icon: <Database size={18} />, label: "Steampunk" },
+  { id: "glassmorphism", icon: <Palette size={18} />, label: "Glassmorphism" },
+  { id: "aqua", icon: <Zap size={18} />, label: "Aqua" },
 ];
 
 const StyleSwitcher = ({ current, onChange }: { current: Theme, onChange: (t: Theme) => void }) => {
@@ -36,7 +42,7 @@ const StyleSwitcher = ({ current, onChange }: { current: Theme, onChange: (t: Th
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: 20 }}
-              className={`flex flex-col gap-2 mb-2 ${isMobile ? 'grid grid-cols-5 gap-2 w-64' : ''}`}
+              className={`mb-2 ${isMobile ? 'grid grid-cols-5 gap-2 w-64' : 'grid grid-cols-4 gap-3 w-72 p-4 glass-card'}`}
             >
               {themes.map((t) => (
                 <motion.button
@@ -46,16 +52,16 @@ const StyleSwitcher = ({ current, onChange }: { current: Theme, onChange: (t: Th
                     onChange(t.id);
                     setIsOpen(false);
                   }}
-                  className={`group relative flex items-center justify-center rounded-full transition-all duration-300 shadow-lg border ${
+                  className={`group relative flex flex-col items-center justify-center rounded-full transition-all duration-300 shadow-lg border ${
                     current === t.id 
                       ? "bg-primary text-white border-primary" 
                       : "bg-card-bg text-text-main border-card-border hover:border-primary/50"
-                  } ${isMobile ? 'size-10' : 'size-12'}`}
+                  } ${isMobile ? 'size-10' : 'size-11'}`}
                   title={t.label}
                 >
                   {t.icon}
                   {!isMobile && (
-                    <span className="absolute right-full mr-4 px-3 py-1 bg-card-bg border border-card-border text-[10px] font-bold uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-card-bg border border-card-border text-[9px] font-bold uppercase tracking-widest rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[101]">
                       {t.label}
                     </span>
                   )}
@@ -394,6 +400,290 @@ const Hero = ({ theme }: { theme: Theme }) => {
             Nous brisons les codes pour créer des expériences visuelles uniques qui marquent les esprits.
           </p>
           <button className="theme-button px-12 py-5 bg-rose-500 text-white rounded-full shadow-lg shadow-rose-500/30">Lancer un projet</button>
+        </div>
+      </section>
+    );
+  }
+
+  if (theme === "cyberpunk") {
+    return (
+      <section className="relative pt-40 pb-20 px-6 overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,0,110,0.05)_25%,rgba(255,0,110,0.05)_50%,transparent_50%,transparent_75%,rgba(255,0,110,0.05)_75%,rgba(255,0,110,0.05))] bg-[200%_200%] animate-[moveBg_20s_linear_infinite]"></div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="mb-12"
+          >
+            <span className="text-primary text-sm font-mono uppercase tracking-[0.3em] font-bold mb-4 block animate-pulse">⚡ NEURAL.NET.INITIALIZED ⚡</span>
+          </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <h1 className="text-6xl md:text-8xl font-black text-white mb-8 uppercase tracking-tighter">
+                CYBER<br /><span className="text-primary text-5xl md:text-7xl">PUNK</span>
+              </h1>
+              <p className="text-lg text-[#00F5FF] mb-8 font-mono leading-relaxed">
+                {">"} Dive into the digital abyss. Where neon meets the void.<br />
+                {">"} Hyper-realistic visuals. Zero compromises.
+              </p>
+              <button className="theme-button px-12 py-4 uppercase font-bold relative overflow-hidden group">
+                <span className="absolute inset-0 bg-gradient-to-r from-[#FF006E] to-[#00F5FF] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                <span className="relative">ENTER THE SYSTEM</span>
+              </button>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="relative aspect-square"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-[#FF006E]/20 to-[#9D00FF]/20 rounded-lg blur-2xl animate-pulse"></div>
+              <img 
+                src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&q=80&w=1920" 
+                alt="Cyberpunk" 
+                className="w-full h-full object-cover rounded-lg border border-primary shadow-[0_0_30px_rgba(255,0,110,0.3)]"
+                referrerPolicy="no-referrer"
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (theme === "forest") {
+    return (
+      <section className="relative pt-40 pb-20 px-6 bg-[#f1faee]">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#74C69D] rounded-full blur-3xl opacity-20"></div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <span className="text-[#40916C] font-serif italic text-sm uppercase tracking-wider mb-4 block">Écologie Numérique</span>
+            <h1 className="text-5xl md:text-7xl font-serif text-[#1B4332] mb-8 leading-[1.1]">
+              Cultivons <br /> l'Harmonie <br /> <span className="text-[#40916C] italic">Digitale</span>
+            </h1>
+            <p className="text-lg text-[#2D6A4F]/80 mb-8 leading-relaxed font-serif italic max-w-md">
+              Une expérience de design naturelle, respectueuse de l'environnement et des utilisateurs. Revenir à l'essentiel.
+            </p>
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              className="theme-button px-12 py-4 bg-[#40916C] text-white rounded-full shadow-lg hover:shadow-xl transition-all"
+            >
+              Découvrir
+            </motion.button>
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative aspect-square rounded-[2rem] overflow-hidden shadow-2xl border-4 border-[#74C69D]/30"
+          >
+            <img 
+              src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=1920" 
+              alt="Nature" 
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
+
+  if (theme === "whiteminimal") {
+    return (
+      <section className="relative pt-40 pb-20 px-6 bg-white">
+        <div className="max-w-6xl mx-auto text-center">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            className="mb-16"
+          >
+            <div className="w-px h-16 bg-black mx-auto mb-12"></div>
+            <h1 className="text-7xl md:text-9xl font-light text-black mb-12 tracking-tight">
+              Essence
+            </h1>
+          </motion.div>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="max-w-xl mx-auto text-sm md:text-base font-light text-black/70 leading-relaxed mb-12"
+          >
+            La beauté réside dans la simplicité. Chaque élément compte. Rien de plus.
+          </motion.p>
+          <motion.button 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="theme-button px-12 py-3 bg-black text-white rounded-none hover:opacity-70 transition-opacity"
+          >
+            Accéder
+          </motion.button>
+        </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6 }}
+          className="mt-20 max-w-5xl mx-auto aspect-video bg-black/5 rounded-sm border border-black/10"
+        >
+          <img 
+            src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1920" 
+            alt="Minimal" 
+            className="w-full h-full object-cover rounded-sm"
+            referrerPolicy="no-referrer"
+          />
+        </motion.div>
+      </section>
+    );
+  }
+
+  if (theme === "steampunk") {
+    return (
+      <section className="relative pt-40 pb-20 px-6 bg-[#1a1a1a] overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <svg className="w-full h-full" viewBox="0 0 1000 1000">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" strokeWidth="2"/>
+            <circle cx="900" cy="900" r="120" fill="none" stroke="currentColor" strokeWidth="2"/>
+            <line x1="0" y1="500" x2="1000" y2="500" stroke="currentColor" strokeWidth="1"/>
+          </svg>
+        </div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="border-2 border-[#B87333] p-8 mb-8 bg-[#2a2a2a]">
+              <span className="text-[#B87333] font-mono text-sm uppercase tracking-wider">INDUSTRIAL EPOCH</span>
+              <h1 className="text-5xl md:text-7xl font-bold text-[#E8D4C4] mt-4 font-mono tracking-tight">
+                STEAM<br />PUNK
+              </h1>
+            </div>
+            <p className="text-[#E8D4C4]/80 mb-8 leading-relaxed max-w-md font-mono text-sm">
+              {">"} Mécanismes complexes. Esthétique victorienne.<br />
+              {">"} Fusion de vapeur et d'électricité industrielle.
+            </p>
+            <button className="theme-button px-10 py-4 bg-[#B87333] text-[#E8D4C4] border-2 border-[#B87333] uppercase font-black">
+              Activer Machine
+            </button>
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, rotate: -10 }}
+            animate={{ opacity: 1, rotate: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative"
+          >
+            <div className="border-4 border-[#B87333] p-4 bg-[#2a2a2a] transform -rotate-3">
+              <img 
+                src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1920" 
+                alt="Steampunk" 
+                className="w-full aspect-square object-cover grayscale contrast-125"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
+
+  if (theme === "glassmorphism") {
+    return (
+      <section className="relative pt-40 pb-20 px-6 bg-gradient-to-br from-[#f5f7fa] via-[#e8f0f8] to-[#f0f5fa] overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#00a8e8] rounded-full blur-3xl opacity-10"></div>
+        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#0077be] rounded-full blur-3xl opacity-10"></div>
+        <div className="max-w-7xl mx-auto text-center relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            className="mb-12 px-6 py-4 rounded-3xl backdrop-blur-xl bg-white/30 border border-white/40 w-fit mx-auto"
+          >
+            <span className="text-[#0077BE] text-sm font-bold uppercase tracking-widest">Transparence Moderne</span>
+          </motion.div>
+          <h1 className="text-6xl md:text-8xl font-black text-[#1E3A5F] mb-8 tracking-tight">
+            Glass <br /> <span className="bg-gradient-to-r from-[#0077BE] to-[#00D4FF] bg-clip-text text-transparent">Morphism</span>
+          </h1>
+          <p className="max-w-2xl mx-auto text-lg text-[#1E3A5F]/70 mb-12">
+            Fluidité et élégance. Des surfaces qui respirent. Design moderne et aérien.
+          </p>
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            className="theme-button px-12 py-4 bg-[#0077BE] text-white rounded-2xl backdrop-blur-md shadow-lg hover:shadow-xl"
+          >
+            Explorer
+          </motion.button>
+        </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="mt-20 max-w-4xl mx-auto mx-auto px-6 py-6 rounded-3xl backdrop-blur-md bg-white/20 border border-white/40 shadow-xl relative z-10"
+        >
+          <img 
+            src="https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=1920" 
+            alt="Glass" 
+            className="w-full aspect-video object-cover rounded-2xl"
+            referrerPolicy="no-referrer"
+          />
+        </motion.div>
+      </section>
+    );
+  }
+
+  if (theme === "aqua") {
+    return (
+      <section className="relative pt-40 pb-20 px-6 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,212,255,0.1),transparent_70%)]"></div>
+        <div className="absolute top-0 left-0 w-96 h-96 bg-[#0099CC]/20 rounded-full blur-3xl animate-[float_6s_ease-in-out_infinite]"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#00D4FF]/15 rounded-full blur-3xl animate-[float_8s_ease-in-out_infinite_1s]"></div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <span className="text-[#00D4FF] font-mono text-sm uppercase tracking-wider mb-4 block">OCÉAN NUMÉRIQUE</span>
+            <h1 className="text-5xl md:text-8xl font-black text-[#E8F4F8] mb-8 uppercase tracking-tight">
+              AQUA<br /><span className="text-[#66E6FF]">SPHERE</span>
+            </h1>
+            <p className="text-[#00D4FF] mb-8 leading-relaxed max-w-md font-mono text-base">
+              Fluidité absolue. Onde après onde.<br />
+              Immersion totale dans l'expérience.
+            </p>
+            <button className="theme-button px-12 py-4 bg-[#00D4FF] text-[#001A33] font-bold uppercase hover:shadow-[0_0_30px_rgba(0,212,255,0.5)]">
+              Plonger
+            </button>
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative aspect-square"
+          >
+            <motion.div 
+              animate={{ y: [0, 20, 0] }}
+              transition={{ duration: 4, repeat: Infinity }}
+              className="w-full h-full"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&q=80&w=1920" 
+                alt="Ocean" 
+                className="w-full h-full object-cover rounded-2xl border-4 border-[#00D4FF]/30 shadow-[0_0_40px_rgba(0,212,255,0.2)]"
+                referrerPolicy="no-referrer"
+              />
+            </motion.div>
+          </motion.div>
         </div>
       </section>
     );

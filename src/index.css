@@ -24,6 +24,17 @@
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
   }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  @keyframes moveBg {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 200%; }
+  }
+  
   --animate-marquee: marquee 20s linear infinite;
 }
 
@@ -159,6 +170,84 @@
     --theme-font: var(--font-display);
   }
 
+  [data-theme="cyberpunk"] {
+    --theme-primary: #FF006E;
+    --theme-bg: #0a0a0f;
+    --theme-text: #FFFFFF;
+    --theme-accent-1: #00F5FF;
+    --theme-accent-2: #9D00FF;
+    --theme-card-bg: rgba(26, 10, 30, 0.8);
+    --theme-card-border: rgba(255, 0, 110, 0.3);
+    --radius-theme: 0.5rem;
+    --theme-hero-layout: "centered";
+    --theme-font: var(--font-display);
+  }
+
+  [data-theme="forest"] {
+    --theme-primary: #40916C;
+    --theme-bg: #F1FAEE;
+    --theme-text: #1B4332;
+    --theme-accent-1: #2D6A4F;
+    --theme-accent-2: #74C69D;
+    --theme-card-bg: #FFFFFF;
+    --theme-card-border: #D1E7DD;
+    --radius-theme: 1.5rem;
+    --theme-hero-layout: "split";
+    --theme-font: var(--font-serif);
+  }
+
+  [data-theme="whiteminimal"] {
+    --theme-primary: #000000;
+    --theme-bg: #FFFFFF;
+    --theme-text: #000000;
+    --theme-accent-1: #808080;
+    --theme-accent-2: #CCCCCC;
+    --theme-card-bg: #FAFAFA;
+    --theme-card-border: #E0E0E0;
+    --radius-theme: 0.125rem;
+    --theme-hero-layout: "clean";
+    --theme-font: var(--font-clean);
+  }
+
+  [data-theme="steampunk"] {
+    --theme-primary: #B87333;
+    --theme-bg: #1A1A1A;
+    --theme-text: #E8D4C4;
+    --theme-accent-1: #8B4513;
+    --theme-accent-2: #654321;
+    --theme-card-bg: #2A2A2A;
+    --theme-card-border: rgba(184, 115, 51, 0.3);
+    --radius-theme: 0rem;
+    --theme-hero-layout: "centered";
+    --theme-font: var(--font-brutal);
+  }
+
+  [data-theme="glassmorphism"] {
+    --theme-primary: #0077BE;
+    --theme-bg: #F5F7FA;
+    --theme-text: #1E3A5F;
+    --theme-accent-1: #00A8E8;
+    --theme-accent-2: #00D4FF;
+    --theme-card-bg: rgba(255, 255, 255, 0.25);
+    --theme-card-border: rgba(0, 173, 239, 0.2);
+    --radius-theme: 1.5rem;
+    --theme-hero-layout: "centered";
+    --theme-font: var(--font-display);
+  }
+
+  [data-theme="aqua"] {
+    --theme-primary: #00D4FF;
+    --theme-bg: #001A33;
+    --theme-text: #E8F4F8;
+    --theme-accent-1: #0099CC;
+    --theme-accent-2: #66E6FF;
+    --theme-card-bg: rgba(0, 119, 190, 0.15);
+    --theme-card-border: rgba(0, 212, 255, 0.3);
+    --radius-theme: 1rem;
+    --theme-hero-layout: "split";
+    --theme-font: var(--font-display);
+  }
+
   body {
     @apply bg-bg-main text-text-main antialiased transition-all duration-500;
     font-family: var(--theme-font);
@@ -213,6 +302,42 @@
     @apply border-2 border-primary shadow-[0_0_10px_#FF00FF] hover:shadow-[0_0_20px_#FF00FF];
   }
 
+  [data-theme="cyberpunk"] .theme-button {
+    --radius-btn: 0.5rem;
+    --theme-btn-text: black;
+    @apply shadow-[0_0_20px_rgba(255,0,110,0.5)] hover:shadow-[0_0_40px_rgba(255,0,110,0.8)] border border-accent-2;
+  }
+
+  [data-theme="forest"] .theme-button {
+    --radius-btn: 1.5rem;
+    --theme-btn-text: white;
+    @apply shadow-md hover:shadow-lg;
+  }
+
+  [data-theme="whiteminimal"] .theme-button {
+    --radius-btn: 0.125rem;
+    --theme-btn-text: white;
+    @apply border border-black hover:opacity-80;
+  }
+
+  [data-theme="steampunk"] .theme-button {
+    --radius-btn: 0rem;
+    --theme-btn-text: #E8D4C4;
+    @apply border-2 border-primary shadow-[3px_3px_0px_0px_rgba(139,69,19,0.6)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5;
+  }
+
+  [data-theme="glassmorphism"] .theme-button {
+    --radius-btn: 1.5rem;
+    --theme-btn-text: white;
+    @apply backdrop-blur-md shadow-lg hover:shadow-xl border border-accent-1/20;
+  }
+
+  [data-theme="aqua"] .theme-button {
+    --radius-btn: 1rem;
+    --theme-btn-text: #001A33;
+    @apply shadow-[0_0_15px_rgba(0,212,255,0.4)] hover:shadow-[0_0_30px_rgba(0,212,255,0.6)];
+  }
+
   .theme-card {
     @apply relative overflow-hidden transition-all duration-500;
     background: var(--theme-card-bg);
@@ -238,6 +363,30 @@
 
   [data-theme="retro"] .theme-card {
     @apply border-2 border-primary shadow-[0_0_15px_rgba(0,255,255,0.3)] hover:shadow-[0_0_25px_rgba(0,255,255,0.5)];
+  }
+
+  [data-theme="cyberpunk"] .theme-card {
+    @apply border border-primary shadow-[0_0_20px_rgba(255,0,110,0.3)] hover:shadow-[0_0_30px_rgba(0,245,255,0.4)];
+  }
+
+  [data-theme="forest"] .theme-card {
+    @apply shadow-md hover:shadow-lg border-primary/20;
+  }
+
+  [data-theme="whiteminimal"] .theme-card {
+    @apply border border-black shadow-none hover:shadow-sm;
+  }
+
+  [data-theme="steampunk"] .theme-card {
+    @apply border-2 border-primary shadow-[3px_3px_0px_0px_rgba(139,69,19,0.4)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5;
+  }
+
+  [data-theme="glassmorphism"] .theme-card {
+    @apply backdrop-blur-md border border-primary/30 shadow-lg hover:shadow-xl hover:border-primary/50;
+  }
+
+  [data-theme="aqua"] .theme-card {
+    @apply border border-primary shadow-[0_0_15px_rgba(0,212,255,0.2)] hover:shadow-[0_0_25px_rgba(0,212,255,0.4)];
   }
 
   /* Marquee Animation for Brutalist */

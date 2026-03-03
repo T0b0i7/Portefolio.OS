@@ -17,9 +17,9 @@
 **Portfolio.OS** incarne une philosophie révolutionnaire du design web : plutôt que de créer une version et d'espérer que le client l'aime, nous **intégrons tout en même temps**.
 
 ### Le Concept
-- 🎨 **10 designs distincts** pour une même expérience
+- 🎨 **16 designs distincts** pour une même expérience
 - 📱 **Contenu immuable** - seul le design change
-- ⚡ **Sélection instantanée** - see all themes in real-time
+- ⚡ **Sélection instantanée** - voir tous les thèmes en temps réel
 - 🎭 Thématique cohérente : UI, UX, typographie, animations
 
 ### Pourquoi Cette Approche ?
@@ -38,9 +38,9 @@ C'est **authentique** parce que c'est transparent. Le client n'attend pas. Il vi
 
 ---
 
-## 🎪 Les 10 Éditions Thématiques
+## 🎪 Les 16 Éditions Thématiques
 
-Chaque thème tells your story differently:
+Chaque thème raconte votre histoire différemment :
 
 | Édition | Style | Vibe | Idéal Pour |
 |---------|-------|------|-----------|
@@ -54,8 +54,14 @@ Chaque thème tells your story differently:
 | **Developer** | Terminal, code, dark mode | Technique, raw | Engineers, dev studios |
 | **Organic** | Arrondi, nature, douceur | Humain, accessible | Wellness, startups eco |
 | **Creative** | Rose vibrant, curves, flou créatif | Artistic, energetic | Artistes, agences créatives |
+| **Cyberpunk** 🌃 | Néons roses/cyan, glow effects | Dystopique, futuriste | Gaming, tech culture |
+| **Forêt** 🌲 | Verts naturels, polices serif | Organique, éco-friendly | Wellness, environnement |
+| **Blanc Minimal** ⚪ | Ultra épuré, noir et blanc | Zen, austère | Minimalisme absolu |
+| **Steampunk** ⚙️ | Bronzes/cuivres, industriel victorien | Vintage mécanique | Art, histoire, design |
+| **Glassmorphism** 🔷 | Verre moderne, backdrop-blur | Contemporain, aérien | Design moderne, apps |
+| **Aqua** 🌊 | Bleus océan, animations fluides | Aquatique, fluide | Wellness, environnement |
 
-**Chaque thème transforme l'interface mais garde la même essence.**
+**Chaque thème transforme entièrement l'interface mais garde la même essence du contenu.**
 
 ---
 
@@ -138,11 +144,16 @@ useEffect(() => {
 
 1. **Ajouter le theme ID dans `App.tsx`**:
 ```tsx
-type Theme = "futuristic" | "editorial" | ... | "votreTheme";
+type Theme = "futuristic" | "editorial" | "brutalist" | "minimalist" | "luxury" | "retro" | "corporate" | "developer" | "organic" | "creative" | "cyberpunk" | "forest" | "whiteminimal" | "steampunk" | "glassmorphism" | "aqua";
 
 const themes = [
-  // ...
-  { id: "votreTheme", icon: <Icon />, label: "Votre Thème" }
+  // ... thèmes existants
+  { id: "cyberpunk", icon: <Zap />, label: "Cyberpunk" },
+  { id: "forest", icon: <Leaf />, label: "Forêt" },
+  { id: "whiteminimal", icon: <Sparkles />, label: "Blanc Minimal" },
+  { id: "steampunk", icon: <Database />, label: "Steampunk" },
+  { id: "glassmorphism", icon: <Palette />, label: "Glassmorphism" },
+  { id: "aqua", icon: <Zap />, label: "Aqua" }
 ];
 ```
 
