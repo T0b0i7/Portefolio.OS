@@ -6,7 +6,7 @@
 
 **Une plateforme next-gen pour les créatifs qui refusent les standards.**
 
-[Démo Live](https://portefolio-os-bice.vercel.app/) • [Documentation](#) • [Contribuer](#)
+[Vercel](https://portefolio-os-bice.vercel.app/) • [Netlify](https://portefolio-os.netlify.app/) • [Documentation](#) • [Contribuer](#)
 
 </div>
 
